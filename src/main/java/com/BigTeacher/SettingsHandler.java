@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 
 public class SettingsHandler {
 	private String host;
@@ -22,9 +21,6 @@ public class SettingsHandler {
         try {
             FileReader reader = new FileReader(configFile);
             props.load(reader);
- 
-            String host = props.getProperty("host");
-            System.out.print("Host name is: " + host);
             reader.close();
         } catch (FileNotFoundException ex) {
             // file does not exist
@@ -60,5 +56,17 @@ public class SettingsHandler {
             // Convert to logger
             ex.printStackTrace();
         }
+	}
+	
+	public String getHost() {
+	    return this.host;
+	}
+	
+	public String getPort() {
+	    return this.port;
+	}
+	
+	public String getDatabase() {
+	    return this.database;
 	}
 }
