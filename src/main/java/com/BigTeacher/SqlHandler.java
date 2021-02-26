@@ -2,11 +2,15 @@ package com.BigTeacher;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import org.apache.commons.text.WordUtils;
 
 /**
 * The SqlHandler utilizes the java.sql module and Jdbc to connect to remote mysql database and perform various sql commands.
+*
 * @author  Taylor Clemons
 * @version 0.1
 * @since   2021-02-25
@@ -14,14 +18,14 @@ import org.apache.commons.text.WordUtils;
 public class SqlHandler {
 	static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";  
     static String DB_URL;
-	private ArrayList<Professor> profList = new ArrayList<>();
     private String USER;
     private String PASS;
     
     /**
 	* Parameterized constructor for SqlHandler class to create Jdbc connection.
-	* @param Properties props: Properties object containing values from properties file
+	*
 	* @see {@link com.BigTeacher.SettingsHandler}
+	* @param Properties props: Properties object containing values from properties file
 	* @param String username: username input
 	* @param String password: password input
 	* @return Nothing
@@ -36,6 +40,7 @@ public class SqlHandler {
     
     /**
 	* Login method to create Jdbc connection and test valid credentials for login to remote database.
+	*
 	* @param static DB_URL: String for Jdbc connection
 	* @param this.USER: username variable set by constructor
 	" @param tbis.PASS: lassword variable set by constructor
@@ -58,6 +63,7 @@ public class SqlHandler {
     
     /**
 	* getName method to create substring of professor last name based on username.
+	*
 	* @param String username: username 
 	* @return String lastName: Sentence-case last name
 	*/
@@ -67,32 +73,90 @@ public class SqlHandler {
     }
     
     /**
-	* professorQuery method to execute SQL join query on professor, teacher_to_course, and course tables
+	* professorQuery method to execute SQL join query on professor, and teacher_to_course
+	*
 	* @param Connection conn: Jdbc connection
 	* @return ArrayList<Professor> profList: ArrayList of Professor objects
 	*/
-    public ArrayList<Professor> professorQuery(Connection conn) {
-        String sql;
-        sql = "SELECT p.professor_id, p.last_name, p.first_name, p.email, c.name AS course_name \n FROM professors p \n JOIN teacher_to_course ttc \n ON \n ttc.professor_id = p.professor_id \n JOIN courses c \n ON \n ttc.course_id = c.course_id";
-        try (
-        Statement stmt = conn.createStatement();
-        ResultSet rs = stmt.executeQuery(sql);
-        ) {
+    public List<Professor> professorQuery(Connection conn, String profLastName) {
+        List<Professor> profList = new ArrayList<>();
+        String sql = null;
+        sql = "SELECT p.professor_id, p.last_name, p.first_name, p.email, ttc.course_id \n FROM professors p \n JOIN teacher_to_course ttc \n ON \n ttc.professor_id = p.professor_id WHERE p.last_name = ?;";
+        try {
+            PreparedStatement prepStmt;
+            prepStmt = conn.prepareStatement(sql);
+		    prepStmt.setString(1, profLastName);
+            ResultSet rs = prepStmt.executeQuery();
+            System.out.println(rs);
             while (rs.next()) {
-                Professor prof = new Professor(rs.getInt("professor_id"), rs.getString("last_name"), rs.getString("first_name"), rs.getString("email"), rs.getString("course_name"));
+                Professor prof = new Professor(rs.getInt("professor_id"), rs.getString("last_name"), rs.getString("first_name"), rs.getString("email"), rs.getInt("course_id"));
                 profList.add(prof);
-                
-                System.out.println("Professor: " + prof.getFirstName() + " " + prof.getLastName() + "\n");
-                System.out.println("Course: " + prof.getCourseName() + "\n");
             }
-        } catch (SQLException e) {
+        } catch(SQLException e) {
             e.printStackTrace();
         }
-        return profList;
+        //return profList;
+		return profList;
     }
     
     /**
+	* studentQuery method to execute SQL join query on student, and student_to_course
+	*
+	* @param Connection conn: Jdbc connection
+	* @param int courseId: from Professor object
+	* @return ArrayList<Professor> profList: ArrayList of Professor objects
+	*/
+    public List<Student> studentQuery(Connection conn, int courseId) {
+        List<Student> studentList = new ArrayList<>();
+        String stringCourseId = String.valueOf(courseId);
+        String sql;
+        sql = "SELECT s.student_id, s.last_name, s.first_name, stc.student_takes_id, stc.course_id \n FROM students s \n JOIN student_to_course stc \n ON \n stc.student_id = s.student_id WHERE stc.course_id = ?";
+         try {
+            PreparedStatement prepStmt;
+            prepStmt = conn.prepareStatement(sql);
+		    prepStmt.setString(1, stringCourseId);
+            ResultSet rs = prepStmt.executeQuery();
+            while (rs.next()) {
+                Student student = new Student(rs.getInt("student_id"), rs.getString("last_name"), rs.getString("first_name"), rs.getInt("student_takes_id"), rs.getInt("course_id"));
+                studentList.add(student);
+            }
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return studentList;
+    }
+    
+     /**
+	* studentQuery method to execute SQL join query on student, and student_to_course
+	*
+	* @param Connection conn: Jdbc connection
+	* @param int courseId: from Professor object
+	* @return ArrayList<Professor> profList: ArrayList of Professor objects
+	*/
+	/*
+    public List<Courses> coursesQuery(Connection conn, int courseId) {
+        String stringCourseId = String.valueOf(courseId);
+        String sql;
+        sql = "SELECT s.student_id, s.last_name, s.first_name, stc.student_takes_id, stc.course_id \n FROM students s \n JOIN student_to_course stc \n ON \n stc.student_id = s.student_id WHERE stc.course_id = ?";
+         try {
+            PreparedStatement prepStmt;
+            prepStmt = conn.prepareStatement(sql);
+		    prepStmt.setString(1, stringCourseId);
+            ResultSet rs = prepStmt.executeQuery();
+            while (rs.next()) {
+                Student student = new Student(rs.getInt("student_id"), rs.getString("last_name"), rs.getString("first_name"), rs.getInt("student_takes_id"), rs.getInt("course_id"));
+                studentList.add(student);
+            }
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return studentList;
+    }
+    */
+    
+    /**
 	* Logout method to logout of app and destroy instantiated objects
+	*
 	* @param Connection conn: Jdbc connection
 	* @return Boolean false: if connection destroyed, return false
 	*/
