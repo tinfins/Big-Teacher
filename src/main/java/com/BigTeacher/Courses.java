@@ -2,14 +2,26 @@ package com.BigTeacher;
 
 import java.util.Date;
 
+/**
+* The Courses class models courses data from the remote mysql database.
+* @author  Taylor Clemons
+* @version 0.1
+* @since   2021-02-25
+*/
 public class Courses {
-	private int courseId;
-	private String name;
-	private Date startDate;
-	private Date endDate;
+	private final int courseId;
+	private final String name;
+	private final Date startDate;
+	private final Date endDate;
 	
-	public Courses() {}
-	
+	/**
+	* Parameterized constructor for immutable courses object includes fields from courses table columns
+	* @param int courseId: course id
+	* @param String name: course name
+	* @param Date startDate: Start date of course
+	* @param Date endDate: End date of course
+	* @return  Nothing
+	*/
 	public Courses(int courseId, String name, Date startDate, Date endDate) {
 	    this.courseId = courseId;
 	    this.name = name;
@@ -21,31 +33,15 @@ public class Courses {
 	    return courseId;
 	}
 	
-	public void setCourseId(int courseId) {
-	    this.courseId = courseId;
-	}
-	
 	public String getName() {
 	    return name;
-	}
-	
-	public void setName(String name) {
-	    this.name = name;
 	}
 	
 	public Date getStartDate() {
 	    return startDate;
 	}
 	
-	public void setStartDate(Date startDate) {
-	    this.startDate = startDate;
-	}
-	
 	public Date getEndDate() {
 	    return endDate;
-	}
-	
-	public void setEndDate(Date endDate) {
-	    this.endDate = endDate;
 	}
 }

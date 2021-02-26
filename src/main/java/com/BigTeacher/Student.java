@@ -1,12 +1,23 @@
 package com.BigTeacher;
 
+/**
+* The Student class models student data from remote mysql database.
+* @author  Taylor Clemons
+* @version 0.1
+* @since   2021-02-25
+*/
 public class Student {
-	private int id;
-	private String firstName;
-	private String lastName;
+	private final int id;
+	private final String firstName;
+	private final String lastName;
 	
-	public Student() {}
-	
+	/**
+	* Parameterized constructor for immutable student object includes fields from students table columns
+	* @param int id: student id
+	* @param String firstName: student first name
+	* @param String lastName: student last name
+	* @return Nothing
+	*/
 	public Student(int id, String firstName, String lastName) {
 		this.id = id;
 		this.firstName = firstName;
@@ -14,26 +25,14 @@ public class Student {
 	}
 	
 	public int getId() {
-	    return id;
-	}
-	
-	public void setId(int id) {
-	    this.id = id;
+	    return this.id;
 	}
 	
 	public String getLastName() {
-	    return lastName;
-	}
-	
-	public void setLastName(String lastName) {
-	    this.lastName = lastName;
+	    return this.lastName;
 	}
 	
 	public String getFirstName() {
-	    return firstName;
-	}
-	
-	public void setFirstName(String firstName) {
-	    this.firstName = firstName;
+	    return this.firstName;
 	}
 }

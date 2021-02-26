@@ -1,14 +1,28 @@
 package com.BigTeacher;
 
+/**
+* The Professor class models professor data from the remote mysql database.
+* courseName is derived from SQL join query of professor, teacher_to_course, and course tables in remote database
+	* @author  Taylor Clemons
+    * @version 0.1
+    * @since   2021-02-25
+	*/
 public class Professor {
-    private int id;
-    private String lastName;
-    private String firstName;
-    private String email;
-    private String courseName;
+    private final int id;
+    private final String lastName;
+    private final String firstName;
+    private final String email;
+    private final String courseName;
     
-    public Professor() {}
-    
+    /**
+	* Parameterized constructor for immutable professor object includes fields from professor table columns
+	* @param int id - professor id
+	* @param String lastName: Professor last name
+	* @param String firstName: Professor first name
+	* @param String email: Professor email
+	* @param String courseName: Course name from courses table.
+	* @return Nothing
+	*/
     public Professor(int id, String lastName, String firstName, String email, String courseName) {
         this.id = id;
         this.lastName = lastName;
@@ -21,40 +35,20 @@ public class Professor {
         return id;
     }
     
-    public void setId(int id) {
-        this.id = id;
-    }
-    
     public String getLastName() {
         return lastName;
-    }
-    
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
     
     public String getFirstName() {
         return firstName;
     }
     
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-    
     public String getEmail() {
         return email;
     }
     
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    
     public String getCourseName() {
         return courseName;
-    }
-    
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
     }
     
     public String toString() {
