@@ -154,6 +154,31 @@ public class SqlHandler {
         return coursesList;
     }
     
+    /**
+	* testsQuery method to retrieve selected tests from tests table
+	*
+	* @param Connection conn: Jdbc connection
+	* @return List<Tests> testsList: List of Tests objects
+	*/
+    public List<Tests> testsQuery(Connection conn, int studentTakesId) {
+        String stringStudentTakesId = String.valueOf(studentTakesId);
+        List<Tests> testsList = new ArrayList<>();
+        String sql;
+        sql = "SELECT t.* \n FROM tests t \n WHERE t.student_takes_id = ?";
+         try {
+            PreparedStatement prepStmt;
+            prepStmt = conn.prepareStatement(sql);
+		    prepStmt.setString(1, stringStudentTakesId);
+            ResultSet rs = prepStmt.executeQuery();
+            while (rs.next()) {
+                Tests assignments = new Tests(rs.getInt("student_takes_id"), rs.getInt("homework_1"), rs.getInt("homework_2"), rs.getInt("homework_3"), rs.getInt("homework_4"), rs.getInt("homework_5"), rs.getInt("homework_6"), rs.getInt("homework_7"), rs.getInt("homework_8"), rs.getInt("quiz_1"), rs.getInt("quiz_2"), rs.getInt("quiz_3"), rs.getInt("quiz_4"), rs.getInt("quiz_5"), rs.getInt("quiz_6"), rs.getInt("quiz_7"), rs.getInt("quiz_8"), rs.getInt("test_1"), rs.getInt("test_2"), rs.getInt("test_3"), rs.getInt("test_4"), rs.getInt("test_5"), rs.getInt("test_6"), rs.getInt("test_7"), rs.getInt("test_8"));
+                testsList.add(assignments);
+            }
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        return testsList;
+    }
     
     /**
 	* Logout method to logout of app and destroy instantiated objects
