@@ -256,4 +256,8 @@ public class Tests {
 	    public void setTest8(int test8) {
 	        this.test8 = test8;
 	    }
+	    
+	    public String toString() {
+	        return String.format("StudentTakesId: %s\nHW 1: %s\nHW 2: %s\nHW 3: %s\nHW4: %s\nHW 5: %s\nHW 6: %s\nHW 7: %s\nHW 8: %s\nQ1: %s\nQ2:%s\nQ3: %s\nQ4: %s\nQ5: %s\nQ6: %s\nQ7: %s\nQ8: %s\nT1: %s\nT2: %s\nT3: %s\nT4: %s\nT5: %s\nT6: %s\nT7: %s\nT8: %s\n", studentTakesId, homework1, homework2, homework3, homework4, homework5, homework6, homework7, homework8, quiz1, quiz2, quiz3, quiz4, quiz5, quiz6, quiz7, quiz8, test1, test2, test3, test4, test5, test6, test7, test8);
+	    }
 }

@@ -67,4 +67,8 @@ public class Courses {
 	public int getProfessorId() {
 	    return this.professorId;
 	}
+	
+	public String toString() {
+	    return String.format("Course Id: %s\nCourse Name: %s\nStart Date: %s\nEnd Date: %s\nStudentTakesId: %s\nStudentId: %s\nProfessor Id: %s\n", courseId, name, startDate, endDate, studentTakesId, studentId, professorId);
+	}
 }

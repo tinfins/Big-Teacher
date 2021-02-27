@@ -67,7 +67,7 @@ public class SqlHandler {
 	* @param String username: username 
 	* @return String lastName: Sentence-case last name
 	*/
-    public String getName(String username) {
+    public String getLastName(String username) {
         username = username.substring(1);
         return WordUtils.capitalize(username);
     }
@@ -76,6 +76,7 @@ public class SqlHandler {
 	* professorQuery method to execute SQL join query on professor, and teacher_to_course
 	*
 	* @param Connection conn: Jdbc connection
+	* @param String profLastName: from getLastName
 	* @return ArrayList<Professor> profList: ArrayList of Professor objects
 	*/
     public List<Professor> professorQuery(Connection conn, String profLastName) {
@@ -104,7 +105,7 @@ public class SqlHandler {
 	*
 	* @param Connection conn: Jdbc connection
 	* @param int courseId: from Professor object
-	* @return ArrayList<Professor> profList: ArrayList of Professor objects
+	* @return List<Professor> studentList: List of Student objects
 	*/
     public List<Student> studentQuery(Connection conn, int courseId) {
         List<Student> studentList = new ArrayList<>();
@@ -127,32 +128,32 @@ public class SqlHandler {
     }
     
      /**
-	* studentQuery method to execute SQL join query on student, and student_to_course
+	* courseQuery method to execute SQL join query on course, teacher_to_course, and student_to_course
 	*
 	* @param Connection conn: Jdbc connection
-	* @param int courseId: from Professor object
-	* @return ArrayList<Professor> profList: ArrayList of Professor objects
+	* @param int professorId: from Professor object
+	* @return List<Courses> courseList: List of Courses objects
 	*/
-	/*
-    public List<Courses> coursesQuery(Connection conn, int courseId) {
-        String stringCourseId = String.valueOf(courseId);
+    public List<Courses> coursesQuery(Connection conn, int professorId) {
+        List<Courses> coursesList = new ArrayList<>();
+        String stringProfessorId = String.valueOf(professorId);
         String sql;
-        sql = "SELECT s.student_id, s.last_name, s.first_name, stc.student_takes_id, stc.course_id \n FROM students s \n JOIN student_to_course stc \n ON \n stc.student_id = s.student_id WHERE stc.course_id = ?";
+        sql = "SELECT c.course_id, c.name AS course_name, c.start_date, c.end_date, stc.student_takes_id, stc.student_id, ttc.professor_id \n FROM courses c \n JOIN student_to_course stc \n ON \n stc.course_id = c.course_id \n JOIN teacher_to_course ttc \n ON \n ttc.course_id = c.course_id WHERE ttc.professor_id = ?";
          try {
             PreparedStatement prepStmt;
             prepStmt = conn.prepareStatement(sql);
-		    prepStmt.setString(1, stringCourseId);
+		    prepStmt.setString(1, stringProfessorId);
             ResultSet rs = prepStmt.executeQuery();
             while (rs.next()) {
-                Student student = new Student(rs.getInt("student_id"), rs.getString("last_name"), rs.getString("first_name"), rs.getInt("student_takes_id"), rs.getInt("course_id"));
-                studentList.add(student);
+                Courses course = new Courses(rs.getInt("course_id"), rs.getString("course_name"), rs.getDate("start_date"), rs.getDate("end_date"), rs.getInt("student_takes_id"), rs.getInt("student_id"), rs.getInt("professor_id"));
+                coursesList.add(course);
             }
         } catch(SQLException e) {
             e.printStackTrace();
         }
-        return studentList;
+        return coursesList;
     }
-    */
+    
     
     /**
 	* Logout method to logout of app and destroy instantiated objects

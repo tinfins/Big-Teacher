@@ -53,6 +53,6 @@ public class Student {
 	}
 	
 	public String toString() {
-        return "Id: " + id + "\nFirst Name: " + firstName + "\nLast Name: " + lastName + "\nStudent Takes Id" + studentTakesId + "\nCourseId: " + String.valueOf(courseId) + "\n";
+        return String.format("Id: %s\nFirst Name: %s\nLast Name: %s\nStudent Takes Id: %s\nCourseId: %s\n", id, firstName, lastName, studentTakesId, courseId);
     }
 }

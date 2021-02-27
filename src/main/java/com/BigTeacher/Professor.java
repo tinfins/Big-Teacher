@@ -54,7 +54,7 @@ public class Professor {
     }
     
     public String toString() {
-        return "Id: " + id + "\nFirst Name: " + firstName + "\nLast Name: " + lastName + "\nEmail" + email + "\nCourseId: " + String.valueOf(courseId) + "\n";
+        return String.format("Id: %s\nFirst Name: %s\nLast Name: %s\nEmail: %s\nCourseId: %s\n", id, firstName, lastName, email, String.valueOf(courseId));
     }
 }
     
