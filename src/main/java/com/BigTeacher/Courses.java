@@ -56,7 +56,7 @@ public class Courses {
 	    return endDate;
 	}
 	
-	public int getStufentTakesId() {
+	public int getStudentTakesId() {
 	    return this.studentTakesId;
 	}
 	

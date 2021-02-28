@@ -160,9 +160,9 @@ public class SqlHandler {
 	* @param Connection conn: Jdbc connection
 	* @return List<Tests> testsList: List of Tests objects
 	*/
-    public List<Tests> testsQuery(Connection conn, int studentTakesId) {
+    public Map<String, Integer> testsQuery(Connection conn, int studentTakesId) {
         String stringStudentTakesId = String.valueOf(studentTakesId);
-        List<Tests> testsList = new ArrayList<>();
+        Map<String, Integer> testsList = new HashMap<>();
         String sql;
         sql = "SELECT t.* \n FROM tests t \n WHERE t.student_takes_id = ?";
          try {
@@ -170,10 +170,20 @@ public class SqlHandler {
             prepStmt = conn.prepareStatement(sql);
 		    prepStmt.setString(1, stringStudentTakesId);
             ResultSet rs = prepStmt.executeQuery();
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int count = rsmd.getColumnCount();
+            while(rs.next()) {
+                for (int i=1;i<count;i++) {
+                    String label = rsmd.getColumnLabel(i);
+                    Integer value = rs.getInt(i);
+                    testsList.put(label, value);
+                }
+            }/*
             while (rs.next()) {
                 Tests assignments = new Tests(rs.getInt("student_takes_id"), rs.getInt("homework_1"), rs.getInt("homework_2"), rs.getInt("homework_3"), rs.getInt("homework_4"), rs.getInt("homework_5"), rs.getInt("homework_6"), rs.getInt("homework_7"), rs.getInt("homework_8"), rs.getInt("quiz_1"), rs.getInt("quiz_2"), rs.getInt("quiz_3"), rs.getInt("quiz_4"), rs.getInt("quiz_5"), rs.getInt("quiz_6"), rs.getInt("quiz_7"), rs.getInt("quiz_8"), rs.getInt("test_1"), rs.getInt("test_2"), rs.getInt("test_3"), rs.getInt("test_4"), rs.getInt("test_5"), rs.getInt("test_6"), rs.getInt("test_7"), rs.getInt("test_8"));
                 testsList.add(assignments);
-            }
+                System.out.println(rsmd.getColumnLabel(1));
+            }*/
         } catch(SQLException e) {
             e.printStackTrace();
         }
